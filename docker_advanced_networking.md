@@ -16,7 +16,7 @@ docker run -ti --rm --name box1 --link box2 ubuntu:trusty
 
 Testing the connection - using netcat package - via custom port 8111. Netcat utility is pre-installed on the ubuntu:trusty image. You can use the box name of the first container (box2) inside the second container (box1) since they are linked and they will be able to interact. But not viceversa.
 ```
-[Step 1: Execute the below command inside box2 container. This will enable netcat to list to TCP port 8111 for connections in box2.]
+[Step 1: Execute the below command inside box2 container. This will enable netcat to listen to TCP port 8111 for connections in box2.]
 netcat -l 8111
 
 [Step 2: Execute the below command inside box1 container. This will create a connection from box1 to box2 via TCP port 8111. Here you can use the box2 name directly because you have linked it at the time of container creation.]
@@ -129,10 +129,10 @@ exit
 docker exec -ti nw-box2 bin/bash
 
 [Execute the below command inside the nw-box2 terminal session to try pinging nw-box1. You will see that this fails as these containers doesn't have any shared network attached.]
-# ping nw-box1
+ping nw-box1
 
 [Execute the below command inside the nw-box1 terminal session to try pinging nw12-box. You will see that this succeeds as these containers have a shared network attached, which is net2.]
-# ping nw12-box
+ping nw12-box
 
 [Now execute the below command to exit from the terminal session of container nw-box1.]
 exit
@@ -143,10 +143,10 @@ exit
 docker exec -ti nw12-box bin/bash
 
 [Execute the below command inside the nw12-box terminal session to try pinging nw-box1. You will see that this succeeds as these containers have a shared network attached, which is net1.]
-# ping nw-box1
+ping nw-box1
 
 [Execute the below command inside the nw12-box terminal session to try pinging nw-box2. You will see that this succeeds as these containers have a shared network attached, which is net2.]
-# ping nw-box2
+ping nw-box2
 
 [Now execute the below command to exit from the terminal session of container nw12-box.]
 exit
