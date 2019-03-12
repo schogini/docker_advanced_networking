@@ -69,23 +69,23 @@ Create a new container with name nw-box1 which is attached to the custom network
 docker run -tid --rm --name nw-box1 --network net1 ubuntu:trusty
 ```
 
-Create another container named nw-box2 attached to the same custom network net1 in a different terminal window.
+Create another container named nw-box2 attached to the custom network net2 in a different terminal window.
 
 ```
-docker run -tid --rm --name nw-box2 --network net1 ubuntu:trusty
+docker run -tid --rm --name nw-box2 --network net2 ubuntu:trusty
 ```
 
-Execute the below commands to get the network details of the running containers. You will see that both the containers are connected to the same network net1.
+Execute the below commands to get the network details of the running containers. You will see the container nw-box1 connected to the net1 network and container nw-box2 connected to the net2 container.
 
 ```
 docker inspect nw-box1 --format '{{.NetworkSettings.Networks}}'
 docker inspect nw-box2 --format '{{.NetworkSettings.Networks}}'
 ```
 
-Attaching a network to a running container. Execute the below command to attach the custom network net2 to the running container nw-box2.
+Attaching a network to a running container. Execute the below command to attach the custom network net1 to the running container nw-box2.
 
 ```
-docker network connect net2 nw-box2
+docker network connect net1 nw-box2
 ```
 
 Get the network details of running containers once again. You will see the container with name nw-box2 is now connected to two networks: net1 and net2, whereas the container with name nw-box1 is still connected to only one network, net1.
@@ -95,10 +95,10 @@ docker inspect nw-box1 --format '{{.NetworkSettings.Networks}}'
 docker inspect nw-box2 --format '{{.NetworkSettings.Networks}}'
 ```
 
-Detaching the custom network net2 from the running container with name nw-box2
+Detaching the custom network net1 from the running container with name nw-box2
 
 ```
-docker network disconnect net2 nw-box2
+docker network disconnect net1 nw-box2
 ```
 
 Creating a new container connected to both the custom networks net1 and net2.
@@ -114,11 +114,14 @@ Checking the connection between containers from each container. You will see tha
 [Execute the below command to enter the terminal of running container nw-box1]
 docker exec -ti nw-box1 bin/bash
 
-[Execute the below command inside the nw-box1 terminal session to try pinging nw-box2. You will see that this fails as these containers doesn't have any shared network attached.]
+[Execute the below command inside the nw-box1 terminal session to try pinging nw-box2. You will see that this fails as these containers doesn't have any shared network.]
 ping nw-box2
 
-[Execute the below command inside the nw-box1 terminal session to try pinging nw12-box. You will see that this succeeds as these containers have a shared network attached, which is net1.]
+[Execute the below command inside the nw-box1 terminal session to try pinging nw12-box. You will see that this succeeds as these containers have a shared network, which is net1.]
 ping nw12-box
+
+[Press Ctrl+C to stop the ping execution.]
+Ctrl+C
 
 [Now execute the below command to exit from the terminal session of container nw-box1.]
 exit
@@ -128,11 +131,14 @@ exit
 [Execute the below command to enter the terminal of running container nw-box2]
 docker exec -ti nw-box2 bin/bash
 
-[Execute the below command inside the nw-box2 terminal session to try pinging nw-box1. You will see that this fails as these containers doesn't have any shared network attached.]
+[Execute the below command inside the nw-box2 terminal session to try pinging nw-box1. You will see that this fails as these containers doesn't have any shared network.]
 ping nw-box1
 
-[Execute the below command inside the nw-box1 terminal session to try pinging nw12-box. You will see that this succeeds as these containers have a shared network attached, which is net2.]
+[Execute the below command inside the nw-box1 terminal session to try pinging nw12-box. You will see that this succeeds as these containers have a shared network, which is net2.]
 ping nw12-box
+
+[Press Ctrl+C to stop the ping execution.]
+Ctrl+C
 
 [Now execute the below command to exit from the terminal session of container nw-box1.]
 exit
@@ -142,11 +148,17 @@ exit
 [Execute the below command to enter the terminal of running container nw12-box]
 docker exec -ti nw12-box bin/bash
 
-[Execute the below command inside the nw12-box terminal session to try pinging nw-box1. You will see that this succeeds as these containers have a shared network attached, which is net1.]
+[Execute the below command inside the nw12-box terminal session to try pinging nw-box1. You will see that this succeeds as these containers have a shared network, which is net1.]
 ping nw-box1
 
-[Execute the below command inside the nw12-box terminal session to try pinging nw-box2. You will see that this succeeds as these containers have a shared network attached, which is net2.]
+[Press Ctrl+C to stop the ping execution.]
+Ctrl+C
+
+[Execute the below command inside the nw12-box terminal session to try pinging nw-box2. You will see that this succeeds as these containers have a shared network, which is net2.]
 ping nw-box2
+
+[Press Ctrl+C to stop the ping execution.]
+Ctrl+C
 
 [Now execute the below command to exit from the terminal session of container nw12-box.]
 exit
